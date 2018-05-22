@@ -1,10 +1,6 @@
--- This is a sample custom writer for pandoc.  It produces output
--- that is very similar to that of pandoc's HTML writer.
--- There is one new feature: code blocks marked with class 'dot'
--- are piped through graphviz and images are included in the HTML
--- output using 'data:' URLs.
+-- This is a JIRA custom writer for pandoc.
 --
--- Invoke with: pandoc -t sample.lua
+-- Invoke with: pandoc --to jira.lua
 --
 -- Note:  you need not have lua installed on your system to use this
 -- custom writer.  However, if you do have lua installed, you can
@@ -15,18 +11,6 @@
 -- Character escaping
 local function escape(s, in_attribute)
   return s
-end
-
--- Helper function to convert an attributes table into
--- a string that can be put into HTML tags.
-local function attributes(attr)
-  local attr_table = {}
-  for x,y in pairs(attr) do
-    if y and y ~= "" then
-      table.insert(attr_table, ' ' .. x .. '="' .. escape(y,true) .. '"')
-    end
-  end
-  return table.concat(attr_table)
 end
 
 -- Run cmd on a temporary file containing inp and return result.
@@ -42,9 +26,6 @@ local function pipe(cmd, inp)
   return result
 end
 
--- Table to store footnotes, so they can be included at the end.
-local notes = {}
-
 -- Blocksep is used to separate block elements.
 function Blocksep()
   return "\n\n"
@@ -57,19 +38,7 @@ end
 -- to pandoc, and pandoc will add do the template processing as
 -- usual.
 function Doc(body, metadata, variables)
-  local buffer = {}
-  local function add(s)
-    table.insert(buffer, s)
-  end
-  add(body)
-  if #notes > 0 then
-    add('<ol class="footnotes">')
-    for _,note in pairs(notes) do
-      add(note)
-    end
-    add('</ol>')
-  end
-  return table.concat(buffer,'\n') .. '\n'
+  return body
 end
 
 -- The functions that follow render corresponding pandoc elements.
@@ -227,7 +196,7 @@ function Table(caption, aligns, widths, headers, rows)
   end
   for _, row in pairs(rows) do
     local content_row = {}
-    for _,c in pairs(row) do
+    for _, c in pairs(row) do
         table.insert(content_row, c)
     end
     add("|" .. table.concat(content_row, "|") .. "|")
