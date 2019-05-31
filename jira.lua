@@ -86,11 +86,11 @@ function Code(s, attr)
 end
 
 function InlineMath(s)
-  return s
+  return ("//( %s //)"):format(escape(s))
 end
 
 function DisplayMath(s)
-  return s
+  return ("{code}\n//( %s //){code}"):format(escape(s))
 end
 
 function Note(s)
