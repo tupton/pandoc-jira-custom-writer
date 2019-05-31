@@ -116,7 +116,7 @@ function Plain(s)
 end
 
 function Para(s)
-  return "\n" .. s .. "\n"
+  return s
 end
 
 -- lev is an integer, the header level.
