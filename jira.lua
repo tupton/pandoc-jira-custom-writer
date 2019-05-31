@@ -125,7 +125,7 @@ function Header(lev, s, attr)
 end
 
 function BlockQuote(s)
-  return "bq. " .. s:match( "^%s*(.-)%s*$" )
+  return ("{quote}\n%s{quote}"):format(s)
 end
 
 function HorizontalRule()
