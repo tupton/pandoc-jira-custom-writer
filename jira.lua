@@ -137,7 +137,11 @@ function LineBlock(ls)
 end
 
 function CodeBlock(s, attr)
-  return "{code}\n" .. s .. "\n{code}"
+  local lang = (attr.class or ''):match('^%a+')
+  return ("{code%s}\n%s{code}"):format(
+    lang and (":" .. lang) or '',
+    s
+  )
 end
 
 function BulletList(items)
