@@ -9,8 +9,8 @@
 -- syntax errors.
 
 -- Character escaping
-local function escape(s, in_attribute)
-  return s
+local function escape(s)
+  return s:gsub("{", "\\{")
 end
 
 -- Blocksep is used to separate block elements.
