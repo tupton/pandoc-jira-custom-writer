@@ -13,19 +13,6 @@ local function escape(s, in_attribute)
   return s
 end
 
--- Run cmd on a temporary file containing inp and return result.
-local function pipe(cmd, inp)
-  local tmp = os.tmpname()
-  local tmph = io.open(tmp, "w")
-  tmph:write(inp)
-  tmph:close()
-  local outh = io.popen(cmd .. " " .. tmp,"r")
-  local result = outh:read("*all")
-  outh:close()
-  os.remove(tmp)
-  return result
-end
-
 -- Blocksep is used to separate block elements.
 function Blocksep()
   return "\n\n"
