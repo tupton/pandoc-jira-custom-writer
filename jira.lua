@@ -102,7 +102,9 @@ function Span(s, attr)
 end
 
 function RawInline(format, str)
-  return "{{" .. str .. "}}"
+  return format == "jira"
+    and str
+    or ""
 end
 
 function Cite(s, cs)
@@ -192,7 +194,7 @@ function Table(caption, aligns, widths, headers, rows)
 end
 
 function RawBlock(format, str)
-  return "{noformat}\n" .. str .. "\n{noformat}"
+  return format == "jira" and str or ""
 end
 
 function Div(s, attr)
