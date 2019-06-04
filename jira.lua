@@ -125,7 +125,7 @@ function Header(lev, s, attr)
 end
 
 function BlockQuote(s)
-  return ("{quote}\n%s{quote}"):format(s)
+  return ("{quote}\n%s\n{quote}"):format(s)
 end
 
 function HorizontalRule()
@@ -138,7 +138,7 @@ end
 
 function CodeBlock(s, attr)
   local lang = (attr.class or ''):match('^%a+')
-  return ("{code%s}\n%s{code}"):format(
+  return ("{code%s}\n%s\n{code}"):format(
     lang and (":" .. lang) or '',
     s
   )
