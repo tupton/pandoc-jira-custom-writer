@@ -50,39 +50,39 @@ function LineBreak()
 end
 
 function Emph(s)
-  return "_" .. s .. "_"
+  return ("_%s_"):format(s)
 end
 
 function Strong(s)
-  return "*" .. s .. "*"
+  return ("*%s*"):format(s)
 end
 
 function Subscript(s)
-  return "~" .. s .. "~"
+  return ("~%s~"):format(s)
 end
 
 function Superscript(s)
-  return "^" .. s .. "^"
+  return ("^%s^"):format(s)
 end
 
 function SmallCaps(s)
-  return s
+  return Str(s)
 end
 
 function Strikeout(s)
-  return '-' .. s .. '-'
+  return ("-%s-"):format(s)
 end
 
 function Link(s, src, tit, attr)
-  return "[" .. escape(s) .. "|" .. src .. "]"
+  return ("[%s|%s]"):format(escape(s), src)
 end
 
 function Image(s, src, tit, attr)
-  return "!" .. escape(s) .. "|" .. src .. "!"
+  return ("!%s|%s!"):format(escape(s), src)
 end
 
 function Code(s, attr)
-  return "{{" .. s .. "}}"
+  return ("{{%s}}"):format(s)
 end
 
 function InlineMath(s)
@@ -94,7 +94,7 @@ function DisplayMath(s)
 end
 
 function Note(s)
-  return s
+  return Str(s)
 end
 
 function Span(s, attr)
@@ -108,7 +108,7 @@ function RawInline(format, str)
 end
 
 function Cite(s, cs)
-  return "??" .. s .. "??"
+  return ("??%s??"):format(escape(s))
 end
 
 function Plain(s)
@@ -121,7 +121,7 @@ end
 
 -- lev is an integer, the header level.
 function Header(lev, s, attr)
-  return "h" .. lev .. ". " .. s
+  return ("h%d. %s"):format(lev, s)
 end
 
 function BlockQuote(s)
@@ -185,14 +185,14 @@ function Table(caption, aligns, widths, headers, rows)
   if empty_header then
     head = ""
   else
-    add("||" .. table.concat(header_row, "||") .. "||")
+    add(("||%s||"):format(table.concat(header_row, "||")))
   end
   for _, row in pairs(rows) do
     local content_row = {}
     for _, c in pairs(row) do
         table.insert(content_row, c)
     end
-    add("|" .. table.concat(content_row, "|") .. "|")
+    add(("|%s|"):format(table.concat(content_row, "|")))
   end
   return table.concat(buffer,'\n')
 end
