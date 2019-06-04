@@ -10,6 +10,11 @@ Fake `code`, too.
 * Two
 * Four
 
+1. A
+2. Numbered
+3. List
+4. With *formatted* __text__
+
 ```js
 function() {
     console.log('no way');
