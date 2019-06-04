@@ -9,21 +9,8 @@
 -- syntax errors.
 
 -- Character escaping
-local function escape(s, in_attribute)
-  return s
-end
-
--- Run cmd on a temporary file containing inp and return result.
-local function pipe(cmd, inp)
-  local tmp = os.tmpname()
-  local tmph = io.open(tmp, "w")
-  tmph:write(inp)
-  tmph:close()
-  local outh = io.popen(cmd .. " " .. tmp,"r")
-  local result = outh:read("*all")
-  outh:close()
-  os.remove(tmp)
-  return result
+local function escape(s)
+  return s:gsub("{", "\\{")
 end
 
 -- Blocksep is used to separate block elements.
@@ -99,11 +86,11 @@ function Code(s, attr)
 end
 
 function InlineMath(s)
-  return s
+  return ("//( %s //)"):format(escape(s))
 end
 
 function DisplayMath(s)
-  return s
+  return ("{code}\n//( %s //){code}"):format(escape(s))
 end
 
 function Note(s)
@@ -115,7 +102,9 @@ function Span(s, attr)
 end
 
 function RawInline(format, str)
-  return "{{" .. str .. "}}"
+  return format == "jira"
+    and str
+    or ""
 end
 
 function Cite(s, cs)
@@ -127,7 +116,7 @@ function Plain(s)
 end
 
 function Para(s)
-  return "\n" .. s .. "\n"
+  return s
 end
 
 -- lev is an integer, the header level.
@@ -136,7 +125,7 @@ function Header(lev, s, attr)
 end
 
 function BlockQuote(s)
-  return "bq. " .. s:match( "^%s*(.-)%s*$" )
+  return ("{quote}\n%s{quote}"):format(s)
 end
 
 function HorizontalRule()
@@ -148,7 +137,11 @@ function LineBlock(ls)
 end
 
 function CodeBlock(s, attr)
-  return "{code}\n" .. s .. "\n{code}"
+  local lang = (attr.class or ''):match('^%a+')
+  return ("{code%s}\n%s{code}"):format(
+    lang and (":" .. lang) or '',
+    s
+  )
 end
 
 function BulletList(items)
@@ -205,7 +198,7 @@ function Table(caption, aligns, widths, headers, rows)
 end
 
 function RawBlock(format, str)
-  return "{noformat}\n" .. str .. "\n{noformat}"
+  return format == "jira" and str or ""
 end
 
 function Div(s, attr)
